@@ -1,10 +1,19 @@
 const API_BASE = '/api';
 
+function getHeaders() {
+  const headers = { 'Content-Type': 'application/json' };
+  const token = localStorage.getItem('token');
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
 async function fetchApi(endpoint, options = {}) {
   const res = await fetch(`${API_BASE}${endpoint}`, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
+      ...getHeaders(),
       ...options.headers,
     },
   });
@@ -18,6 +27,12 @@ async function fetchApi(endpoint, options = {}) {
 }
 
 export const api = {
+  login: (credentials) => fetchApi('/auth/login', { method: 'POST', body: JSON.stringify(credentials) }),
+  logout: () => {
+    localStorage.removeItem('token');
+  },
+  verify: () => fetchApi('/auth/verify'),
+
   getSprints: () => fetchApi('/sprints'),
   getSprint: (id) => fetchApi(`/sprints/${id}`),
   createSprint: (data) => fetchApi('/sprints', { method: 'POST', body: JSON.stringify(data) }),
@@ -30,6 +45,15 @@ export const api = {
   deleteTask: (id) => fetchApi(`/tasks/${id}`, { method: 'DELETE' }),
 
   downloadReport: (sprintId) => {
-    window.open(`${API_BASE}/sprints/${sprintId}/report`, '_blank');
+    const token = localStorage.getItem('token');
+    window.open(`${API_BASE}/sprints/${sprintId}/report?token=${token}`, '_blank');
   },
 };
+
+export function setToken(token) {
+  localStorage.setItem('token', token);
+}
+
+export function isAuthenticated() {
+  return !!localStorage.getItem('token');
+}

@@ -104,7 +104,7 @@ function SprintDetail() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <Link to="/" className="text-sm text-gray-500 hover:text-gray-900 mb-2 inline-block">
+          <Link to="/app" className="text-sm text-gray-500 hover:text-gray-900 mb-2 inline-block">
             &larr; Back to Dashboard
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">{sprint.title}</h1>
