@@ -33,6 +33,17 @@ export const api = {
   },
   verify: () => fetchApi('/auth/verify'),
 
+  getUsers: () => fetchApi('/users'),
+  updateUser: (id, data) => fetchApi(`/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  uploadAvatar: (id, file) => {
+    const formData = new FormData();
+    formData.append('avatar', file);
+    return fetch(`/api/users/${id}/avatar`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+      body: formData,
+    }).then((r) => r.json());
+  },
   getSprints: () => fetchApi('/sprints'),
   getSprint: (id) => fetchApi(`/sprints/${id}`),
   createSprint: (data) => fetchApi('/sprints', { method: 'POST', body: JSON.stringify(data) }),
@@ -56,4 +67,14 @@ export function setToken(token) {
 
 export function isAuthenticated() {
   return !!localStorage.getItem('token');
+}
+
+// Carrega imagens protegidas e devolve um blob URL
+export async function loadProtectedImage(url) {
+  if (!url) return null;
+  const token = localStorage.getItem('token');
+  const res = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+  if (!res.ok) return null;
+  const blob = await res.blob();
+  return URL.createObjectURL(blob);
 }

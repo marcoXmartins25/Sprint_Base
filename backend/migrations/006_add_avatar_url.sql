@@ -1,0 +1,1 @@
+-- Already handled in 005_add_user_profile.sql

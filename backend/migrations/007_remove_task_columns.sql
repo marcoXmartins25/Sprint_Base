@@ -1,0 +1,1 @@
+-- tags, archived, place were never added (removed from 004_add_task_fields.sql)

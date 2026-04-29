@@ -4,7 +4,7 @@ const { pool } = require('../db');
 
 router.post('/', async (req, res) => {
   try {
-    const { sprint_id, title, description, status, priority } = req.body;
+    const { sprint_id, title, description, status, priority, due_start, due_end, assigned_to, hours } = req.body;
     if (!sprint_id || !title) {
       return res.status(400).json({ error: 'sprint_id and title are required' });
     }
@@ -13,8 +13,10 @@ router.post('/', async (req, res) => {
       return res.status(404).json({ error: 'Sprint not found' });
     }
     const result = await pool.query(
-      'INSERT INTO tasks (sprint_id, title, description, status, priority) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [sprint_id, title, description || '', status || 'to-do', priority || 'medium']
+      `INSERT INTO tasks (sprint_id, title, description, status, priority, due_start, due_end, assigned_to, hours)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
+      [sprint_id, title, description || '', status || 'to-do', priority || 'medium',
+       due_start || null, due_end || null, assigned_to || '', hours || 0]
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
@@ -25,16 +27,20 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, status, priority } = req.body;
+    const { title, description, status, priority, due_start, due_end, assigned_to, hours } = req.body;
     const result = await pool.query(
       `UPDATE tasks SET
         title = COALESCE($1, title),
         description = COALESCE($2, description),
         status = COALESCE($3, status),
         priority = COALESCE($4, priority),
+        due_start = COALESCE($5, due_start),
+        due_end = COALESCE($6, due_end),
+        assigned_to = COALESCE($7, assigned_to),
+        hours = COALESCE($8, hours),
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $5 RETURNING *`,
-      [title, description, status, priority, id]
+      WHERE id = $9 RETURNING *`,
+      [title, description, status, priority, due_start ?? null, due_end ?? null, assigned_to, hours ?? null, id]
     );
     if (result.rows.length === 0) {
       return res.status(404).json({ error: 'Task not found' });
