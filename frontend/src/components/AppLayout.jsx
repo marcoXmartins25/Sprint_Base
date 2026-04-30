@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { api } from '../api';
 import Avatar from './Avatar';
+import Logo from './Logo';
 
 function AppLayout() {
   const location = useLocation();
@@ -38,10 +39,12 @@ function AppLayout() {
           <div className="flex items-center justify-between h-14">
             {/* Left */}
             <div className="flex items-center gap-2">
-              <Link to="/app" className="text-base font-bold text-gray-900 tracking-tight mr-4">
-                Sprint<span className="text-indigo-600">Base</span>
+              <Link to="/app" className="flex items-center gap-2 mr-4">
+                <Logo size={28} />
+                <span className="text-base font-bold text-gray-900 tracking-tight">Sprint<span className="text-indigo-600">Base</span></span>
               </Link>
               {navLink('/app', 'Dashboard')}
+              {navLink('/docs', 'Docs')}
             </div>
 
             {/* Right */}
