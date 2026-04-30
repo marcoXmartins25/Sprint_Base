@@ -18,10 +18,19 @@ router.get('/:id/report', async (req, res) => {
     );
     const tasks = tasksResult.rows;
 
+    const teamResult = await pool.query(
+      `SELECT DISTINCT u.id, u.name, u.email, u.avatar_url
+       FROM users u
+       INNER JOIN tasks t ON LOWER(t.assigned_to) = LOWER(u.email)
+       WHERE t.sprint_id = $1 AND t.assigned_to != ''`,
+      [id]
+    );
+    const team = teamResult.rows;
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename="sprint-report-${sprint.title.replace(/\s+/g, '-').toLowerCase()}.pdf"`);
 
-    const doc = generateSprintReport(sprint, tasks);
+    const doc = generateSprintReport(sprint, tasks, team);
     doc.pipe(res);
   } catch (err) {
     res.status(500).json({ error: err.message });
