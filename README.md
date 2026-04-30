@@ -1,9 +1,6 @@
 <div align="center">
 
-<<<<<<< HEAD
 <img src="https://raw.githubusercontent.com/marcoXmartins25/Sprint_Base/main/frontend/public/favicon.svg" alt="SprintBase Logo" width="72" height="72" />
-=======
->>>>>>> fb58e5e02c860cad60346f062d59e40c6c62d0a0
 
 # SprintBase
 
