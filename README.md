@@ -1,6 +1,5 @@
 <div align="center">
 
-<img src="frontend/public/favicon.svg" alt="SprintBase Logo" width="72" height="72" />
 
 # SprintBase
 
