@@ -1,160 +1,59 @@
-# Sprint Base — Release v1.0.0
+<div align="center">
 
-**Data de lançamento:** Maio 2025
+<img src="frontend/public/favicon.svg" alt="SprintBase Logo" width="72" height="72" />
 
----
+# SprintBase
 
-## O que é o Sprint Base?
+**Sprint management for developers and small teams.**  
+Plan sprints · Track tasks · Export PDF reports
 
-Sprint Base é uma aplicação web de gestão de sprints e tarefas, pensada para equipas de desenvolvimento que querem uma ferramenta simples, rápida e sem ruído. Permite criar sprints, gerir tarefas com prioridades e estados, atribuir membros da equipa e exportar relatórios em PDF.
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14+-4169E1?style=flat-square&logo=postgresql&logoColor=white)](https://postgresql.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![License: MIT](https://img.shields.io/badge/License-MIT-6366f1?style=flat-square)](LICENSE)
 
----
-
-## Stack Tecnológica
-
-| Camada     | Tecnologia                              |
-|------------|-----------------------------------------|
-| Frontend   | React 18, React Router v6, Tailwind CSS, Vite |
-| Backend    | Node.js, Express                        |
-| Base de dados | PostgreSQL                           |
-| Auth       | JWT (jsonwebtoken) + bcryptjs           |
-| PDF        | PDFKit                                  |
-| Upload     | Multer                                  |
+</div>
 
 ---
 
-## Funcionalidades desta versão
+## What is SprintBase?
 
-### Autenticação
-- Login com email e password
-- Tokens JWT com expiração de 7 dias
-- Verificação de sessão automática
+SprintBase is a full-stack web application for managing development sprints. Built for developers and small teams who want a simple, fast and distraction-free tool — no bloat, no complexity.
 
-### Sprints
-- Criar, editar e eliminar sprints
-- Visualização ordenada: sprint ativa em primeiro, depois futuras, depois passadas
-- Dashboard com cards por sprint
-
-### Tarefas
-- Criar tarefas dentro de um sprint com título, descrição, prioridade, estado, datas e horas estimadas
-- Edição inline diretamente na tabela (título, prioridade, estado, datas, horas)
-- Atribuição de tarefas a membros da equipa com avatar
-- Filtros por estado: All / To Do / In Progress / Done
-- Barra de progresso calculada por sprint
-- Estatísticas por sprint: total, to-do, in progress, done, horas
-
-### Relatórios
-- Exportação de relatório PDF por sprint com lista de tarefas
-
-### Perfil de utilizador
-- Edição de nome e email
-- Upload de foto de perfil (máx. 2MB)
-- Avatar com iniciais como fallback
+Create sprints, manage tasks with priorities and time estimates, assign team members, track progress in real time, and export branded PDF reports, all from a clean and minimal interface.
 
 ---
 
-## Base de dados — Migrações incluídas
+## Features
 
-| Ficheiro | Descrição |
-|----------|-----------|
-| `001_create_sprints.sql` | Tabela de sprints |
-| `002_create_tasks.sql` | Tabela de tarefas com FK para sprints |
-| `003_create_users.sql` | Tabela de utilizadores |
-| `004_add_task_fields.sql` | Campos adicionais nas tarefas |
-| `005_add_user_profile.sql` | Campos de perfil no utilizador |
-| `006_add_avatar_url.sql` | Campo avatar_url |
-| `007_remove_task_columns.sql` | Limpeza de colunas obsoletas |
-| `008_add_task_hours.sql` | Campo de horas estimadas por tarefa |
+| | Feature | Description |
+|---|---|---|
+| 🗂️ | **Sprint Planning** | Create and manage sprints with start/end dates. Active sprint always surfaces first. |
+| ✅ | **Task Management** | Full CRUD with priority, status, due dates, hours and assignee. |
+| ✏️ | **Inline Editing** | Edit any task field directly in the table — no modals, no friction. |
+| 📊 | **Progress Tracking** | Weighted progress bar: Done (100%) · In Progress (50%) · To Do (0%). |
+| 👥 | **Team Assignment** | Assign tasks to team members with avatar support. |
+| 📄 | **PDF Reports** | Server-side generated reports with full task details, badges and progress bar. |
+| 🔒 | **JWT Auth** | Secure authentication with 7-day tokens. Protected file uploads. |
+| 🖼️ | **User Profiles** | Display name, email and avatar upload (max 2MB). |
 
 ---
 
-## Como instalar e correr
+## Tech Stack
 
-### Pré-requisitos
-- Node.js 18+
-- PostgreSQL 14+
-
-### Backend
-
-```bash
-cd backend
-cp .env.example .env
-# Preenche as variáveis no .env (DB_HOST, DB_USER, DB_PASSWORD, DB_NAME, JWT_SECRET)
-npm install
-npm run db:setup   # cria tabelas e seed inicial
-npm run dev
 ```
-
-### Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-A aplicação fica disponível em `http://localhost:5173` e a API em `http://localhost:3000`.
-
----
-
-## Variáveis de ambiente (backend)
-
-```env
-PORT=3000
-DB_HOST=localhost
-DB_PORT=5432
-DB_USER=<db_user>
-DB_PASSWORD=<db_password>
-DB_NAME=<db_name>
-JWT_SECRET=<secret_key>
+Frontend          Backend           Database
+─────────────     ─────────────     ─────────────
+React 18          Node.js           PostgreSQL 14+
+React Router 6    Express
+Tailwind CSS 3    JWT Auth
+Vite 5            PDFKit
+                  Multer
 ```
 
 ---
 
-## Estrutura do projeto
+## License
 
-```
-Sprint_Base/
-├── backend/
-│   ├── migrations/       # SQL de criação e alteração de tabelas
-│   ├── scripts/          # migrate.js e seed.js
-│   ├── seeders/          # Dados iniciais (utilizadores)
-│   └── src/
-│       ├── routes/       # auth, sprints, tasks, reports
-│       ├── db.js         # Ligação ao PostgreSQL
-│       ├── index.js      # Entry point Express
-│       └── pdf.js        # Geração de relatórios PDF
-└── frontend/
-    └── src/
-        ├── components/   # AppLayout, SprintCard, TaskForm, Avatar, Logo
-        └── pages/        # Dashboard, SprintDetail, Profile, Login, Landing, Docs
-```
-
----
-
-## API — Endpoints principais
-
-| Método | Rota | Descrição |
-|--------|------|-----------|
-| POST | `/api/auth/login` | Login |
-| GET | `/api/auth/verify` | Verificar token |
-| GET | `/api/sprints` | Listar sprints |
-| POST | `/api/sprints` | Criar sprint |
-| PUT | `/api/sprints/:id` | Editar sprint |
-| DELETE | `/api/sprints/:id` | Eliminar sprint |
-| GET | `/api/sprints/:id/tasks` | Tarefas de um sprint |
-| GET | `/api/sprints/:id/report` | Download PDF |
-| POST | `/api/tasks` | Criar tarefa |
-| PUT | `/api/tasks/:id` | Editar tarefa |
-| DELETE | `/api/tasks/:id` | Eliminar tarefa |
-| GET | `/api/users` | Listar utilizadores |
-| PUT | `/api/users/:id` | Editar utilizador |
-| POST | `/api/users/:id/avatar` | Upload de avatar |
-
----
-
-## Notas
-
-- Os ficheiros de upload (avatares) são servidos em `/uploads/:file` e requerem autenticação
-- O seed inicial cria utilizadores de exemplo definidos em `seeders/001_users.js`
-- O campo `hours` nas tarefas aceita valores decimais (ex: `1.5` para 1h30)
+MIT © Marco
