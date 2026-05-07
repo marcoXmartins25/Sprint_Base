@@ -25,6 +25,7 @@ const SECTIONS = [
       { id: 'priority', label: 'Priority & Status' },
       { id: 'hours', label: 'Tracking Hours' },
       { id: 'assign', label: 'Assigning Members' },
+      { id: 'task-fields', label: 'Task Fields' },
     ],
   },
   {
@@ -305,12 +306,17 @@ export default function Docs() {
                   <tbody className="divide-y divide-gray-50">
                     {[
                       { field: 'Task Name', type: 'Text', desc: 'Short description of the task' },
+                      { field: 'Week', type: 'Text', desc: 'Sprint week this task belongs to, e.g. S1, W3' },
                       { field: 'Priority', type: 'Select', desc: 'Low / Medium / High' },
                       { field: 'Status', type: 'Select', desc: 'To Do / In Progress / Done' },
                       { field: 'Due Start', type: 'Date', desc: 'When work should begin' },
                       { field: 'Date End', type: 'Date', desc: 'Deadline for the task' },
                       { field: 'Assign', type: 'Select', desc: 'Team member from your users list' },
+                      { field: 'Deliverable', type: 'Text', desc: 'Resultado esperado / entregável da task' },
+                      { field: 'Definition of Done', type: 'Text', desc: 'Critérios que definem quando a task está concluída' },
                       { field: 'Hours', type: 'Number', desc: 'Time spent on the task (e.g. 2.5)' },
+                      { field: 'Dependencies', type: 'Text', desc: 'Tasks or resources this task depends on' },
+                      { field: 'Risk', type: 'Text', desc: 'Identified risk associated with this task' },
                       { field: 'Description', type: 'Text', desc: 'Optional longer description' },
                     ].map(({ field, type, desc }) => (
                       <tr key={field}>
@@ -331,10 +337,15 @@ export default function Docs() {
               <div className="space-y-2 my-4">
                 {[
                   { cell: 'Task Name', action: 'Click to edit inline. Press Enter to save, Escape to cancel.' },
+                  { cell: 'Week', action: 'Click to edit inline. e.g. S1, W3.' },
                   { cell: 'Priority / Status', action: 'Click the badge to open a dropdown. Select an option to save instantly.' },
                   { cell: 'Due Start / Date End', action: 'Click the calendar icon to open a date picker. Click Apply to save.' },
                   { cell: 'Assign', action: 'Click the avatar to open a user dropdown with names and avatars.' },
+                  { cell: 'Deliverable', action: 'Click to edit inline. Describes the expected output.' },
+                  { cell: 'Definition of Done', action: 'Click to edit inline. Defines the completion criteria.' },
                   { cell: 'Hours', action: 'Click to edit inline. Enter a number (e.g. 1.5 for 1h30m).' },
+                  { cell: 'Dependencies', action: 'Click to edit inline. List the task dependencies.' },
+                  { cell: 'Risk', action: 'Click to edit inline. Describes the associated risk.' },
                 ].map(({ cell, action }) => (
                   <div key={cell} className="flex gap-3 bg-gray-50 rounded-xl px-4 py-3">
                     <Badge color="indigo">{cell}</Badge>
@@ -382,6 +393,30 @@ export default function Docs() {
               </p>
               <Callout type="tip">Users are pulled from the database. To add a new user, they need to be registered via the login page or seeded directly in the DB.</Callout>
             </SubSection>
+
+            <SubSection id="task-fields" title="Task Fields">
+              <p className="text-sm text-gray-600 leading-relaxed mb-3">
+                Each task supports the following additional fields for more complete management:
+              </p>
+              <div className="space-y-3 my-4">
+                {[
+                  { icon: '📅', field: 'Week', desc: 'Identifies the sprint week this task belongs to. Useful for organising work across longer sprints.' },
+                  { icon: '📦', field: 'Deliverable', desc: 'The concrete output expected from this task — what will be delivered when it is done.' },
+                  { icon: '✅', field: 'Definition of Done', desc: 'Objective criteria that define when the task can be considered complete. Removes ambiguity.' },
+                  { icon: '🔗', field: 'Dependencies', desc: 'Other tasks, services or resources this task depends on before it can progress.' },
+                  { icon: '⚠️', field: 'Risk', desc: 'Identified risk that may impact the completion of this task. Helps anticipate blockers.' },
+                ].map(({ icon, field, desc }) => (
+                  <div key={field} className="flex gap-3 bg-gray-50 rounded-xl px-4 py-3">
+                    <span className="text-lg shrink-0">{icon}</span>
+                    <div>
+                      <p className="text-xs font-semibold text-gray-800 mb-0.5">{field}</p>
+                      <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <Callout type="tip">All these fields are editable inline directly in the sprint table, no modal required.</Callout>
+            </SubSection>
           </Section>
 
           {/* Reports */}
@@ -395,7 +430,7 @@ export default function Docs() {
                   'Sprint title, dates and generation timestamp',
                   'Stats: Total, To Do, In Progress, Done',
                   'Progress bar with completion percentage',
-                  'Full task table with Priority, Status, Dates, Assign and Hours',
+                  'Full task table with all fields: Week, Priority, Status, Dates, Assign, Deliverable, Definition of Done, Hours, Dependencies and Risk',
                   'Colour-coded priority and status badges',
                   'Strikethrough on completed tasks',
                 ].map(item => (

@@ -326,19 +326,24 @@ function SprintDetail() {
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50">
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-56">Task Name</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-16">Week</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-24">Priority</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-24">Due Start</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-24">Date End</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-28">Status</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-36">Assign</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-40">Deliverable</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-40">Def. of Done</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-20">Hours</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-36">Dependencies</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-32">Risk</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-28">Status</th>
               <th className="w-10"></th>
             </tr>
           </thead>
           <tbody>
             {filtered.length === 0 ? (
               <tr>
-                <td colSpan={8} className="text-center py-16">
+                <td colSpan={13} className="text-center py-16">
                   <p className="text-3xl mb-2">📋</p>
                   <p className="text-gray-500 font-medium">No tasks yet</p>
                   <p className="text-gray-400 text-sm mt-1">Click "Add Task" to create the first one</p>
@@ -351,6 +356,9 @@ function SprintDetail() {
                   {task.description && (
                     <p className="text-xs text-gray-400 truncate max-w-[200px] mt-0.5">{task.description}</p>
                   )}
+                </td>
+                <td className="px-4 py-3">
+                  <EditableText value={task.week} onSave={(v) => updateField(task.id, 'week', v)} placeholder="S1" />
                 </td>
                 <td className="px-4 py-3">
                   <EditableSelect
@@ -369,18 +377,6 @@ function SprintDetail() {
                 </td>
                 <td className="px-4 py-3">
                   <EditableDate value={task.due_end} onSave={(v) => updateField(task.id, 'due_end', v)} />
-                </td>
-                <td className="px-4 py-3">
-                  <EditableSelect
-                    value={task.status}
-                    options={[
-                      { value: 'to-do', label: 'To Do' },
-                      { value: 'in-progress', label: 'In Progress' },
-                      { value: 'done', label: 'Done' },
-                    ]}
-                    renderValue={(v) => <Badge cfg={statusConfig[v] || statusConfig['to-do']} />}
-                    onSave={(v) => updateField(task.id, 'status', v)}
-                  />
                 </td>
                 <td className="px-4 py-3">
                   <EditableSelect
@@ -406,10 +402,34 @@ function SprintDetail() {
                   />
                 </td>
                 <td className="px-4 py-3">
+                  <EditableText value={task.deliverable} onSave={(v) => updateField(task.id, 'deliverable', v)} placeholder="Deliverable" />
+                </td>
+                <td className="px-4 py-3">
+                  <EditableText value={task.definition_of_done} onSave={(v) => updateField(task.id, 'definition_of_done', v)} placeholder="DoD" />
+                </td>
+                <td className="px-4 py-3">
                   <EditableText
                     value={task.hours > 0 ? String(task.hours) : ''}
                     onSave={(v) => updateField(task.id, 'hours', parseFloat(v) || 0)}
                     placeholder="0h"
+                  />
+                </td>
+                <td className="px-4 py-3">
+                  <EditableText value={task.dependencies} onSave={(v) => updateField(task.id, 'dependencies', v)} placeholder="Dependencies" />
+                </td>
+                <td className="px-4 py-3">
+                  <EditableText value={task.risk} onSave={(v) => updateField(task.id, 'risk', v)} placeholder="Risk" />
+                </td>
+                <td className="px-4 py-3">
+                  <EditableSelect
+                    value={task.status}
+                    options={[
+                      { value: 'to-do', label: 'To Do' },
+                      { value: 'in-progress', label: 'In Progress' },
+                      { value: 'done', label: 'Done' },
+                    ]}
+                    renderValue={(v) => <Badge cfg={statusConfig[v] || statusConfig['to-do']} />}
+                    onSave={(v) => updateField(task.id, 'status', v)}
                   />
                 </td>
                 <td className="px-2 py-3">

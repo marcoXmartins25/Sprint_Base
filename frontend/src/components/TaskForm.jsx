@@ -13,6 +13,7 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
   const [form, setForm] = useState({
     title: '', description: '', status: 'to-do', priority: 'medium',
     due_start: '', due_end: '', assigned_to: '',
+    week: '', deliverable: '', definition_of_done: '', dependencies: '', risk: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,6 +28,11 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
         due_start: task.due_start ? task.due_start.slice(0, 10) : '',
         due_end: task.due_end ? task.due_end.slice(0, 10) : '',
         assigned_to: task.assigned_to || '',
+        week: task.week || '',
+        deliverable: task.deliverable || '',
+        definition_of_done: task.definition_of_done || '',
+        dependencies: task.dependencies || '',
+        risk: task.risk || '',
       });
     }
   }, [task]);
@@ -117,6 +123,42 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
               <input type="date" value={form.due_end} onChange={set('due_end')}
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
             </div>
+          </div>
+
+          {/* Week */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-semibold text-gray-700">Week</label>
+            <input type="text" value={form.week} onChange={set('week')} placeholder="e.g. S1, W3..."
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
+          </div>
+
+          {/* Deliverable + Risk */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-sm font-semibold text-gray-700">Deliverable</label>
+              <input type="text" value={form.deliverable} onChange={set('deliverable')} placeholder="Expected output..."
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-sm font-semibold text-gray-700">Risk</label>
+              <input type="text" value={form.risk} onChange={set('risk')} placeholder="Identified risk..."
+                className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
+            </div>
+          </div>
+
+          {/* Definition of Done */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-semibold text-gray-700">Definition of Done</label>
+            <textarea value={form.definition_of_done} onChange={set('definition_of_done')} rows={2}
+              placeholder="Completion criteria..."
+              className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none" />
+          </div>
+
+          {/* Dependencies */}
+          <div className="space-y-1.5">
+            <label className="text-sm font-semibold text-gray-700">Dependencies</label>
+            <input type="text" value={form.dependencies} onChange={set('dependencies')} placeholder="e.g. Task #3, external API..."
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
           </div>
 
           {/* Description */}
