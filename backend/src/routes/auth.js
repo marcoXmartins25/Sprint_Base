@@ -43,7 +43,13 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
-    const result = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+    const result = await pool.query(
+      `SELECT u.*, c.name as company_name, c.plan as company_plan 
+       FROM users u 
+       LEFT JOIN companies c ON u.company_id = c.id 
+       WHERE u.email = $1`,
+      [email]
+    );
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -61,6 +67,12 @@ router.post('/login', async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
+        name: user.name,
+        role: user.role,
+        companyRole: user.company_role,
+        companyId: user.company_id,
+        companyName: user.company_name,
+        companyPlan: user.company_plan,
       },
     });
   } catch (err) {
@@ -70,11 +82,31 @@ router.post('/login', async (req, res) => {
 
 router.get('/verify', verifyToken, async (req, res) => {
   try {
-    const result = await pool.query('SELECT id, email FROM users WHERE id = $1', [req.userId]);
+    const result = await pool.query(
+      `SELECT u.id, u.email, u.name, u.role, u.company_role, u.company_id, u.avatar_url,
+              c.name as company_name, c.plan as company_plan
+       FROM users u
+       LEFT JOIN companies c ON u.company_id = c.id
+       WHERE u.id = $1`,
+      [req.userId]
+    );
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'User not found' });
     }
-    res.json({ user: result.rows[0] });
+    const user = result.rows[0];
+    res.json({ 
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        companyRole: user.company_role,
+        companyId: user.company_id,
+        companyName: user.company_name,
+        companyPlan: user.company_plan,
+        avatarUrl: user.avatar_url,
+      }
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

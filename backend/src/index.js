@@ -8,6 +8,12 @@ const authRoutes = require('./routes/auth').router;
 const sprintRoutes = require('./routes/sprints');
 const taskRoutes = require('./routes/tasks');
 const reportRoutes = require('./routes/reports');
+const planRoutes = require('./routes/plan');
+const brandingRoutes = require('./routes/branding');
+const usersRoutes = require('./routes/users');
+const companiesRoutes = require('./routes/companies');
+const teamRoutes = require('./routes/team');
+const invitesRoutes = require('./routes/invites');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,6 +33,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage, limits: { fileSize: 2 * 1024 * 1024 } });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/companies', companiesRoutes);
+app.use('/api/invites', invitesRoutes);
 
 // Servir uploads apenas para utilizadores autenticados
 app.get('/uploads/:file', verifyToken, (req, res) => {
@@ -37,7 +45,7 @@ app.get('/uploads/:file', verifyToken, (req, res) => {
 
 app.get('/api/users', verifyToken, async (req, res) => {
   const { pool } = require('./db');
-  const result = await pool.query('SELECT id, email, name, avatar_url FROM users ORDER BY name, email');
+  const result = await pool.query('SELECT id, email, name, avatar_url, role FROM users ORDER BY name, email');
   res.json(result.rows);
 });
 
@@ -71,6 +79,10 @@ app.post('/api/users/:id/avatar', verifyToken, upload.single('avatar'), async (r
 app.use('/api/sprints', verifyToken, sprintRoutes);
 app.use('/api/tasks', verifyToken, taskRoutes);
 app.use('/api/sprints', verifyToken, reportRoutes);
+app.use('/api/team', verifyToken, teamRoutes);
+app.use('/api/users', verifyToken, planRoutes);
+app.use('/api/users', verifyToken, brandingRoutes);
+app.use('/api/admin/users', verifyToken, usersRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });

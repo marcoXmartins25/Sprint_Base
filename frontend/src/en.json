@@ -1,0 +1,179 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "back": "Back",
+    "logout": "Logout",
+    "signIn": "Sign In",
+    "loading": "Loading..."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "team": "Team",
+    "company": "Company",
+    "admin": "Admin",
+    "docs": "Docs",
+    "profile": "Profile"
+  },
+  "sprint": {
+    "title": "Sprint",
+    "newSprint": "New Sprint",
+    "editSprint": "Edit Sprint",
+    "deleteSprint": "Delete Sprint",
+    "deleteConfirm": "Delete this sprint and all its tasks?",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "active": "Active",
+    "upcoming": "Upcoming",
+    "completed": "Completed",
+    "notFound": "Sprint not found",
+    "titleRequired": "Title is required",
+    "datesRequired": "Start and end dates are required",
+    "endAfterStart": "End date must be after start date",
+    "createSprint": "Create Sprint",
+    "updateSprint": "Update Sprint"
+  },
+  "task": {
+    "title": "Task",
+    "newTask": "New Task",
+    "addTask": "Add Task",
+    "editTask": "Edit Task",
+    "updateTask": "Update Task",
+    "deleteTask": "Delete this task?",
+    "taskName": "Task Name",
+    "description": "Description",
+    "descriptionPlaceholder": "Optional description...",
+    "priority": "Priority",
+    "status": "Status",
+    "dueStart": "Due Start",
+    "dueEnd": "Date End",
+    "assign": "Assign",
+    "unassigned": "Unassigned",
+    "hours": "Hours",
+    "week": "Week",
+    "weekPlaceholder": "e.g. S1, W3...",
+    "deliverable": "Deliverable",
+    "deliverablePlaceholder": "Expected output...",
+    "definitionOfDone": "Definition of Done",
+    "definitionOfDonePlaceholder": "Completion criteria...",
+    "dependencies": "Dependencies",
+    "dependenciesPlaceholder": "e.g. Task #3, external API...",
+    "risk": "Risk",
+    "riskPlaceholder": "Identified risk...",
+    "noTasks": "No tasks yet",
+    "noTasksHint": "Click \"Add Task\" to create the first one",
+    "titleRequired": "Title is required"
+  },
+  "priority": {
+    "low": "Low",
+    "medium": "Medium",
+    "high": "High"
+  },
+  "status": {
+    "toDo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done",
+    "all": "All"
+  },
+  "stats": {
+    "total": "Total",
+    "toDo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done",
+    "hours": "Hours",
+    "complete": "complete"
+  },
+  "report": {
+    "downloadPDF": "↓ PDF"
+  },
+  "profile": {
+    "title": "Profile",
+    "displayName": "Display Name",
+    "email": "Email",
+    "avatar": "Avatar",
+    "uploadAvatar": "Upload Avatar",
+    "saveChanges": "Save Changes",
+    "updated": "Profile updated successfully",
+    "noName": "No name set",
+    "details": "Profile Details",
+    "namePlaceholder": "Your name",
+    "saved": "Saved",
+    "photoTitle": "Profile Photo",
+    "photoHint": "Click on your avatar above to upload a photo. Max 2MB."
+  },
+  "auth": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Sign In",
+    "invalidCredentials": "Invalid credentials",
+    "emailPasswordRequired": "Email and password are required"
+  },
+  "dashboard": {
+    "subtitle": "Manage your weekly sprints",
+    "noSprints": "No sprints yet",
+    "noSprintsHint": "Click \"New Sprint\" to get started"
+  },
+  "login": {
+    "tagline": "Manage sprints.\nShip faster.",
+    "subtitle": "The sprint management tool built for developers and small teams.",
+    "feature1": "Plan and manage weekly sprints",
+    "feature2": "Track tasks with priority & hours",
+    "feature3": "Assign tasks to team members",
+    "feature4": "Export beautiful PDF reports",
+    "welcome": "Welcome back",
+    "welcomeSubtitle": "Sign in to your account to continue",
+    "show": "Show",
+    "hide": "Hide",
+    "signingIn": "Signing in...",
+    "backHome": "Back to home"
+  },
+  "pricing": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "Choose the plan that fits your team. Start free, upgrade anytime.",
+    "popular": "Most Popular",
+    "month": "month",
+    "getStarted": "Get Started",
+    "startFree": "Start Free",
+    "questions": "Have questions?",
+    "checkDocs": "Check the docs",
+    "free": {
+      "name": "Free",
+      "price": "€0",
+      "ideal": "Ideal for: Freelancers and personal projects"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "€10",
+      "yearly": "or €100/year (save 17%)",
+      "ideal": "Ideal for: Small teams and startups"
+    },
+    "team": {
+      "name": "Team",
+      "price": "€30",
+      "yearly": "or €300/year (save 17%)",
+      "ideal": "Ideal for: Growing teams"
+    },
+    "features": {
+      "users": "users",
+      "usersUnlimited": "Unlimited users",
+      "sprints": "active sprints",
+      "tasks": "tasks per sprint",
+      "basicFields": "Basic fields (title, status, priority)",
+      "pdfWatermark": "PDF export with watermark",
+      "sprintsUnlimited": "Unlimited sprints",
+      "tasksUnlimited": "Unlimited tasks",
+      "allFields": "All fields (deliverable, DoD, dependencies, risk)",
+      "pdfClean": "PDF export without watermark",
+      "history6m": "6 months history",
+      "everythingPro": "Everything in Pro",
+      "historyUnlimited": "Unlimited history",
+      "integrations": "Integrations (Slack, GitHub, Jira)",
+      "prioritySupport": "Priority support",
+      "customBranding": "Custom branding in PDFs"
+    }
+  }
+}

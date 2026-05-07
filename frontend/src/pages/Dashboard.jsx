@@ -1,15 +1,21 @@
 import { useState, useEffect } from 'react';
 import { api } from '../api';
+import { useLanguage } from '../LanguageContext';
 import SprintCard from '../components/SprintCard';
 import SprintForm from '../components/SprintForm';
+import UpgradeModal from '../components/UpgradeModal';
 
 function Dashboard() {
+  const { t } = useLanguage();
   const [sprints, setSprints] = useState([]);
   const [showForm, setShowForm] = useState(false);
   const [editingSprint, setEditingSprint] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [company, setCompany] = useState(null);
+  const [limitError, setLimitError] = useState(null);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
 
-  useEffect(() => { loadSprints(); }, []);
+  useEffect(() => { loadSprints(); loadCompany(); }, []);
 
   const loadSprints = async () => {
     try {
@@ -37,10 +43,33 @@ function Dashboard() {
     }
   };
 
+  const loadCompany = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3000/api/companies/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      setCompany(data);
+    } catch (err) {
+      console.error('Failed to load company:', err);
+    }
+  };
+
   const handleCreate = async (data) => {
-    await api.createSprint(data);
-    setShowForm(false);
-    loadSprints();
+    try {
+      await api.createSprint(data);
+      setShowForm(false);
+      setLimitError(null);
+      loadSprints();
+    } catch (err) {
+      if (err.message.includes('plan allows only')) {
+        setLimitError(err.message);
+        setShowUpgradeModal(true);
+      } else {
+        console.error('Failed to create sprint:', err);
+      }
+    }
   };
 
   const handleUpdate = async (data) => {
@@ -50,7 +79,7 @@ function Dashboard() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm('Delete this sprint and all its tasks?')) return;
+    if (!confirm(t('sprint.deleteConfirm'))) return;
     try {
       await api.deleteSprint(id);
       loadSprints();
@@ -63,6 +92,7 @@ function Dashboard() {
     return (
       <div className="flex items-center justify-center py-20">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+        <span className="ml-3 text-gray-500">{t('common.loading')}</span>
       </div>
     );
   }
@@ -71,16 +101,37 @@ function Dashboard() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Sprints</h1>
-          <p className="text-gray-500 mt-1">Manage your weekly sprints</p>
+          <h1 className="text-2xl font-bold text-gray-900">{t('sprint.title')}s</h1>
+          <div className="flex items-center gap-2 mt-1">
+            <p className="text-gray-500">{t('dashboard.subtitle')}</p>
+            {company && (
+              <span className="text-xs px-2 py-0.5 rounded-full font-semibold capitalize bg-indigo-100 text-indigo-700">
+                {company.plan}
+              </span>
+            )}
+          </div>
         </div>
         <button
           onClick={() => setShowForm(true)}
           className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl hover:opacity-90 transition shadow-md shadow-indigo-200"
         >
-          <span className="text-lg leading-none">+</span> New Sprint
+          <span className="text-lg leading-none">+</span> {t('sprint.newSprint')}
         </button>
       </div>
+
+      {/* Limit error */}
+      {limitError && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+          <span className="text-2xl">⚠️</span>
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-amber-900 mb-1">Sprint Limit Reached</p>
+            <p className="text-sm text-amber-700">{limitError}</p>
+          </div>
+          <a href="/pricing" className="px-4 py-2 text-xs font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-lg hover:opacity-90 transition shrink-0">
+            Upgrade Now
+          </a>
+        </div>
+      )}
 
       {showForm && (
         <SprintForm onSubmit={handleCreate} onCancel={() => setShowForm(false)} />
@@ -93,8 +144,8 @@ function Dashboard() {
       {sprints.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-dashed border-gray-200">
           <p className="text-4xl mb-3">🚀</p>
-          <p className="text-gray-700 font-semibold">No sprints yet</p>
-          <p className="text-gray-400 text-sm mt-1">Click "New Sprint" to get started</p>
+          <p className="text-gray-700 font-semibold">{t('dashboard.noSprints')}</p>
+          <p className="text-gray-400 text-sm mt-1">{t('dashboard.noSprintsHint')}</p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -103,6 +154,13 @@ function Dashboard() {
           ))}
         </div>
       )}
+
+      <UpgradeModal 
+        isOpen={showUpgradeModal} 
+        onClose={() => setShowUpgradeModal(false)}
+        message={limitError}
+        feature="sprints"
+      />
     </div>
   );
 }

@@ -1,0 +1,179 @@
+{
+  "common": {
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "add": "Adicionar",
+    "back": "Voltar",
+    "logout": "Sair",
+    "signIn": "Entrar",
+    "loading": "A carregar..."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "team": "Equipa",
+    "company": "Empresa",
+    "admin": "Admin",
+    "docs": "Documentação",
+    "profile": "Perfil"
+  },
+  "sprint": {
+    "title": "Sprint",
+    "newSprint": "Nova Sprint",
+    "editSprint": "Editar Sprint",
+    "deleteSprint": "Eliminar Sprint",
+    "deleteConfirm": "Eliminar esta sprint e todas as suas tarefas?",
+    "startDate": "Data de Início",
+    "endDate": "Data de Fim",
+    "active": "Ativa",
+    "upcoming": "Próxima",
+    "completed": "Concluída",
+    "notFound": "Sprint não encontrada",
+    "titleRequired": "O título é obrigatório",
+    "datesRequired": "As datas de início e fim são obrigatórias",
+    "endAfterStart": "A data de fim deve ser posterior à data de início",
+    "createSprint": "Criar Sprint",
+    "updateSprint": "Atualizar Sprint"
+  },
+  "task": {
+    "title": "Tarefa",
+    "newTask": "Nova Tarefa",
+    "addTask": "Adicionar Tarefa",
+    "editTask": "Editar Tarefa",
+    "updateTask": "Atualizar Tarefa",
+    "deleteTask": "Eliminar esta tarefa?",
+    "taskName": "Nome da Tarefa",
+    "description": "Descrição",
+    "descriptionPlaceholder": "Descrição opcional...",
+    "priority": "Prioridade",
+    "status": "Estado",
+    "dueStart": "Início",
+    "dueEnd": "Fim",
+    "assign": "Atribuir",
+    "unassigned": "Não atribuída",
+    "hours": "Horas",
+    "week": "Semana",
+    "weekPlaceholder": "ex: S1, W3...",
+    "deliverable": "Entregável",
+    "deliverablePlaceholder": "Resultado esperado...",
+    "definitionOfDone": "Critérios de Conclusão",
+    "definitionOfDonePlaceholder": "Critérios de conclusão...",
+    "dependencies": "Dependências",
+    "dependenciesPlaceholder": "ex: Tarefa #3, API externa...",
+    "risk": "Risco",
+    "riskPlaceholder": "Risco identificado...",
+    "noTasks": "Ainda sem tarefas",
+    "noTasksHint": "Clica em \"Adicionar Tarefa\" para criar a primeira",
+    "titleRequired": "O título é obrigatório"
+  },
+  "priority": {
+    "low": "Baixa",
+    "medium": "Média",
+    "high": "Alta"
+  },
+  "status": {
+    "toDo": "Por Fazer",
+    "inProgress": "Em Progresso",
+    "done": "Concluída",
+    "all": "Todas"
+  },
+  "stats": {
+    "total": "Total",
+    "toDo": "Por Fazer",
+    "inProgress": "Em Progresso",
+    "done": "Concluídas",
+    "hours": "Horas",
+    "complete": "completo"
+  },
+  "report": {
+    "downloadPDF": "↓ PDF"
+  },
+  "profile": {
+    "title": "Perfil",
+    "displayName": "Nome",
+    "email": "Email",
+    "avatar": "Avatar",
+    "uploadAvatar": "Carregar Avatar",
+    "saveChanges": "Guardar Alterações",
+    "updated": "Perfil atualizado com sucesso",
+    "noName": "Sem nome definido",
+    "details": "Detalhes do Perfil",
+    "namePlaceholder": "O teu nome",
+    "saved": "Guardado",
+    "photoTitle": "Foto de Perfil",
+    "photoHint": "Clica no teu avatar acima para carregar uma foto. Máx 2MB."
+  },
+  "auth": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Palavra-passe",
+    "loginButton": "Entrar",
+    "invalidCredentials": "Credenciais inválidas",
+    "emailPasswordRequired": "Email e palavra-passe são obrigatórios"
+  },
+  "dashboard": {
+    "subtitle": "Gere as suas sprints semanais",
+    "noSprints": "Ainda sem sprints",
+    "noSprintsHint": "Clica em \"Nova Sprint\" para começar"
+  },
+  "login": {
+    "tagline": "Gere sprints.\nEntregue mais rápido.",
+    "subtitle": "A ferramenta de gestão de sprints feita para developers e pequenas equipas.",
+    "feature1": "Planeia e gere sprints semanais",
+    "feature2": "Acompanha tarefas com prioridade e horas",
+    "feature3": "Atribui tarefas a membros da equipa",
+    "feature4": "Exporta relatórios PDF profissionais",
+    "welcome": "Bem-vindo de volta",
+    "welcomeSubtitle": "Entra na tua conta para continuar",
+    "show": "Mostrar",
+    "hide": "Ocultar",
+    "signingIn": "A entrar...",
+    "backHome": "Voltar ao início"
+  },
+  "pricing": {
+    "title": "Preços simples e transparentes",
+    "subtitle": "Escolhe o plano ideal para a tua equipa. Começa grátis, faz upgrade quando quiseres.",
+    "popular": "Mais Popular",
+    "month": "mês",
+    "getStarted": "Começar",
+    "startFree": "Começar Grátis",
+    "questions": "Tens questões?",
+    "checkDocs": "Consulta a documentação",
+    "free": {
+      "name": "Grátis",
+      "price": "€0",
+      "ideal": "Ideal para: Freelancers e projetos pessoais"
+    },
+    "pro": {
+      "name": "Pro",
+      "price": "€10",
+      "yearly": "ou €100/ano (poupa 17%)",
+      "ideal": "Ideal para: Pequenas equipas e startups"
+    },
+    "team": {
+      "name": "Team",
+      "price": "€30",
+      "yearly": "ou €300/ano (poupa 17%)",
+      "ideal": "Ideal para: Equipas em crescimento"
+    },
+    "features": {
+      "users": "utilizadores",
+      "usersUnlimited": "Utilizadores ilimitados",
+      "sprints": "sprints ativas",
+      "tasks": "tarefas por sprint",
+      "basicFields": "Campos básicos (título, estado, prioridade)",
+      "pdfWatermark": "Exportação PDF com marca d'água",
+      "sprintsUnlimited": "Sprints ilimitadas",
+      "tasksUnlimited": "Tarefas ilimitadas",
+      "allFields": "Todos os campos (entregável, DoD, dependências, risco)",
+      "pdfClean": "Exportação PDF sem marca d'água",
+      "history6m": "Histórico de 6 meses",
+      "everythingPro": "Tudo do Pro",
+      "historyUnlimited": "Histórico ilimitado",
+      "integrations": "Integrações (Slack, GitHub, Jira)",
+      "prioritySupport": "Suporte prioritário",
+      "customBranding": "Branding personalizado nos PDFs"
+    }
+  }
+}

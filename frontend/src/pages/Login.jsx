@@ -1,16 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { setToken, api } from '../api';
+import { useLanguage } from '../LanguageContext';
 import Logo from '../components/Logo';
 
-const FEATURES = [
-  { icon: '🗂️', text: 'Plan and manage weekly sprints' },
-  { icon: '✅', text: 'Track tasks with priority & hours' },
-  { icon: '👥', text: 'Assign tasks to team members' },
-  { icon: '📄', text: 'Export beautiful PDF reports' },
-];
-
 export default function Login() {
+  const { t } = useLanguage();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -22,7 +17,7 @@ export default function Login() {
     e.preventDefault();
     setError('');
     setLoading(true);
-    if (!email || !password) { setError('Email and password are required'); setLoading(false); return; }
+    if (!email || !password) { setError(t('auth.emailPasswordRequired')); setLoading(false); return; }
     try {
       const data = await api.login({ email, password });
       setToken(data.token);
@@ -53,14 +48,19 @@ export default function Login() {
           <div className="relative space-y-6">
             <div>
               <h2 className="text-2xl font-bold text-white leading-tight mb-2">
-                Manage sprints.<br />Ship faster.
+                {t('login.tagline')}
               </h2>
               <p className="text-indigo-200 text-sm leading-relaxed">
-                The sprint management tool built for developers and small teams.
+                {t('login.subtitle')}
               </p>
             </div>
             <div className="space-y-3">
-              {FEATURES.map(({ icon, text }) => (
+              {[
+                { icon: '🗂️', text: t('login.feature1') },
+                { icon: '✅', text: t('login.feature2') },
+                { icon: '👥', text: t('login.feature3') },
+                { icon: '📄', text: t('login.feature4') },
+              ].map(({ icon, text }) => (
                 <div key={text} className="flex items-center gap-3">
                   <div className="w-7 h-7 bg-white/10 rounded-lg flex items-center justify-center text-sm shrink-0">
                     {icon}
@@ -85,8 +85,8 @@ export default function Login() {
               </Link>
             </div>
             <div className="mb-6">
-              <h1 className="text-2xl font-bold text-gray-900">Welcome back</h1>
-              <p className="text-gray-500 text-sm mt-1">Sign in to your account to continue</p>
+              <h1 className="text-2xl font-bold text-gray-900">{t('login.welcome')}</h1>
+              <p className="text-gray-500 text-sm mt-1">{t('login.welcomeSubtitle')}</p>
             </div>
 
             {error && (
@@ -97,7 +97,7 @@ export default function Login() {
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-gray-700">Email</label>
+                <label className="text-sm font-semibold text-gray-700">{t('auth.email')}</label>
                 <input
                   type="email"
                   value={email}
@@ -107,7 +107,7 @@ export default function Login() {
                 />
               </div>
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-gray-700">Password</label>
+                <label className="text-sm font-semibold text-gray-700">{t('auth.password')}</label>
                 <div className="relative">
                   <input
                     type={showPass ? 'text' : 'password'}
@@ -118,23 +118,23 @@ export default function Login() {
                   />
                   <button type="button" onClick={() => setShowPass(s => !s)}
                     className="absolute right-3 top-2.5 text-xs text-gray-400 hover:text-gray-600 transition">
-                    {showPass ? 'Hide' : 'Show'}
+                    {showPass ? t('login.hide') : t('login.show')}
                   </button>
                 </div>
               </div>
               <button type="submit" disabled={loading}
                 className="w-full py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl hover:opacity-90 transition disabled:opacity-60 flex items-center justify-center gap-2 mt-1">
                 {loading && <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />}
-                {loading ? 'Signing in...' : 'Sign In'}
+                {loading ? t('login.signingIn') : t('auth.loginButton')}
               </button>
             </form>
 
             <div className="flex items-center justify-between mt-6">
               <Link to="/" className="text-xs text-gray-400 hover:text-gray-700 transition">
-                ← Back to home
+                ← {t('login.backHome')}
               </Link>
               <Link to="/docs" className="text-xs text-gray-400 hover:text-gray-700 transition">
-                Documentation
+                {t('nav.docs')}
               </Link>
             </div>
           </div>

@@ -142,6 +142,7 @@ export default function Landing() {
           </Link>
           <div className="flex items-center gap-8">
             <a href="#features" className="text-sm text-gray-500 hover:text-gray-900 transition hidden sm:block">Features</a>
+            <Link to="/pricing" className="text-sm text-gray-500 hover:text-gray-900 transition hidden sm:block">Pricing</Link>
             <Link to="/docs" className="text-sm text-gray-500 hover:text-gray-900 transition hidden sm:block">Docs</Link>
             <Link to="/login"
               className="px-4 py-2 text-sm font-semibold text-indigo-600 border border-indigo-200 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition">
@@ -171,7 +172,7 @@ export default function Landing() {
                 Plan sprints, track tasks with priorities and hours, assign team members, and export beautiful PDF reports — all in one place.
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
-                <Link to="/login"
+                <Link to="/register-company"
                   className="px-6 py-3 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl hover:opacity-90 transition shadow-lg shadow-indigo-200 text-center">
                   Get Started Free
                 </Link>
@@ -265,11 +266,11 @@ export default function Landing() {
       <section className="py-24 px-6">
         <div className="max-w-2xl mx-auto text-center">
           <div className="bg-gradient-to-br from-indigo-600 to-violet-600 rounded-3xl p-12 shadow-2xl shadow-indigo-200">
-            <h2 className="text-3xl font-bold text-white mb-4">Ready to ship faster?</h2>
-            <p className="text-indigo-200 mb-8">Start managing your sprints today. No setup, no complexity.</p>
-            <Link to="/login"
+            <h2 className="text-3xl font-bold text-white mb-4">Choose your plan</h2>
+            <p className="text-indigo-200 mb-8">Start free. Upgrade as you grow. Cancel anytime.</p>
+            <Link to="/pricing"
               className="inline-flex items-center gap-2 px-8 py-3.5 text-sm font-semibold text-indigo-600 bg-white rounded-xl hover:bg-indigo-50 transition shadow-lg">
-              Open SprintBase
+              View Pricing
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>

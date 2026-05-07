@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { api } from '../api';
+import { useLanguage } from '../LanguageContext';
 import Avatar from '../components/Avatar';
 
 function Profile() {
+  const { t } = useLanguage();
   const [user, setUser] = useState(null);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -16,11 +18,9 @@ function Profile() {
 
   const loadUser = async () => {
     const data = await api.verify();
-    const users = await api.getUsers();
-    const full = users.find((u) => u.id === data.user.id) || data.user;
-    setUser(full);
-    setName(full.name || '');
-    setEmail(full.email || '');
+    setUser(data.user);
+    setName(data.user.name || '');
+    setEmail(data.user.email || '');
   };
 
   const handleSave = async () => {
@@ -74,14 +74,14 @@ function Profile() {
               <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleAvatar} />
             </div>
           </div>
-          <h1 className="text-xl font-bold text-gray-900">{user.name || 'No name set'}</h1>
+          <h1 className="text-xl font-bold text-gray-900">{user.name || t('profile.noName')}</h1>
           <p className="text-sm text-gray-400 mt-0.5">{user.email}</p>
         </div>
       </div>
 
       {/* Edit form */}
       <div className="bg-white rounded-2xl border border-gray-100 p-6 space-y-5">
-        <h2 className="text-base font-semibold text-gray-800">Profile Details</h2>
+        <h2 className="text-base font-semibold text-gray-800">{t('profile.details')}</h2>
 
         {error && (
           <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">
@@ -90,15 +90,15 @@ function Profile() {
         )}
 
         <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-gray-600">Display Name</label>
+          <label className="text-sm font-semibold text-gray-600">{t('profile.displayName')}</label>
           <input type="text" value={name} onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSave()}
-            placeholder="Your name"
+            placeholder={t('profile.namePlaceholder')}
             className="w-full px-4 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition text-sm" />
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-semibold text-gray-600">Email</label>
+          <label className="text-sm font-semibold text-gray-600">{t('auth.email')}</label>
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSave()}
             placeholder="your@email.com"
@@ -109,17 +109,17 @@ function Profile() {
           <button onClick={handleSave} disabled={saving}
             className="px-5 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl hover:opacity-90 transition disabled:opacity-60 flex items-center gap-2">
             {saving && <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />}
-            Save Changes
+            {t('profile.saveChanges')}
           </button>
-          {saved && <span className="text-sm text-emerald-600 font-medium">✓ Saved</span>}
+          {saved && <span className="text-sm text-emerald-600 font-medium">✓ {t('profile.saved')}</span>}
         </div>
       </div>
 
       <div className="bg-indigo-50 border border-indigo-100 rounded-2xl px-5 py-4 flex items-center gap-3">
         <span className="text-2xl">🖼️</span>
         <div>
-          <p className="text-sm font-semibold text-indigo-700">Profile Photo</p>
-          <p className="text-xs text-indigo-400 mt-0.5">Click on your avatar above to upload a photo. Max 2MB.</p>
+          <p className="text-sm font-semibold text-indigo-700">{t('profile.photoTitle')}</p>
+          <p className="text-xs text-indigo-400 mt-0.5">{t('profile.photoHint')}</p>
         </div>
       </div>
     </div>

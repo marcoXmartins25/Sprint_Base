@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { api } from '../api';
+import { useLanguage } from '../LanguageContext';
 import Avatar from './Avatar';
 import Logo from './Logo';
 
@@ -8,13 +9,17 @@ function AppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [companyRole, setCompanyRole] = useState('');
+  const { lang, setLang, t } = useLanguage();
 
   useEffect(() => {
     api.verify().then((data) => {
-      api.getUsers().then((users) => {
-        const full = users.find((u) => u.id === data.user.id) || data.user;
-        setUser(full);
-      });
+      setUser(data.user);
+      setIsAdmin(data.user.role === 'admin');
+      setCompanyName(data.user.companyName || '');
+      setCompanyRole(data.user.companyRole || '');
     }).catch(() => {});
   }, []);
 
@@ -39,16 +44,35 @@ function AppLayout() {
           <div className="flex items-center justify-between h-14">
             {/* Left */}
             <div className="flex items-center gap-2">
-              <Link to="/app" className="flex items-center gap-2 mr-4">
+              <Link to="/app/dashboard" className="flex items-center gap-2 mr-4">
                 <Logo size={28} />
                 <span className="text-base font-bold text-gray-900 tracking-tight">Sprint<span className="text-indigo-600">Base</span></span>
               </Link>
-              {navLink('/app', 'Dashboard')}
-              {navLink('/docs', 'Docs')}
+              {navLink('/app/dashboard', t('nav.dashboard'))}
+              {navLink('/app/team', t('nav.team'))}
+              {navLink('/app/company', t('nav.company'))}
+              {isAdmin && navLink('/app/admin', t('nav.admin'))}
             </div>
 
             {/* Right */}
             <div className="flex items-center gap-3">
+              {/* Company Badge */}
+              {companyName && (
+                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-indigo-50 rounded-lg border border-indigo-100">
+                  <span className="text-xs font-semibold text-indigo-900">{companyName}</span>
+                  {companyRole && (
+                    <span className="text-xs text-indigo-600 capitalize">· {companyRole}</span>
+                  )}
+                </div>
+              )}
+              {/* Language Toggle */}
+              <button
+                onClick={() => setLang(lang === 'en' ? 'pt' : 'en')}
+                className="text-xs font-medium text-gray-500 hover:text-gray-900 px-2 py-1 rounded-lg hover:bg-gray-100 transition uppercase"
+                title={lang === 'en' ? 'Switch to Portuguese' : 'Mudar para Inglês'}>
+                {lang === 'en' ? '🇬🇧 EN' : '🇵🇹 PT'}
+              </button>
+              <div className="w-px h-4 bg-gray-200" />
               <Link to="/app/profile" className="flex items-center gap-2 px-2 py-1 rounded-lg hover:bg-gray-100 transition">
                 <Avatar user={user} size="w-7 h-7" />
                 <span className="text-sm font-medium text-gray-700 hidden sm:block">
@@ -58,7 +82,7 @@ function AppLayout() {
               <div className="w-px h-4 bg-gray-200" />
               <button onClick={handleLogout}
                 className="text-sm text-gray-400 hover:text-gray-700 transition font-medium px-2 py-1 rounded-lg hover:bg-gray-100">
-                Logout
+                {t('common.logout')}
               </button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from '../LanguageContext';
 
 const PRIORITIES = ['low', 'medium', 'high'];
 const STATUSES = ['to-do', 'in-progress', 'done'];
@@ -10,6 +11,7 @@ const priorityColor = {
 };
 
 function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
+  const { t } = useLanguage();
   const [form, setForm] = useState({
     title: '', description: '', status: 'to-do', priority: 'medium',
     due_start: '', due_end: '', assigned_to: '',
@@ -43,7 +45,7 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (!form.title.trim()) return setError('Title is required');
+    if (!form.title.trim()) return setError(t('task.titleRequired'));
     setLoading(true);
     try {
       await onSubmit({ sprint_id: sprintId, ...form, title: form.title.trim() });
@@ -62,7 +64,7 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
         {/* Header */}
         <div className="bg-gradient-to-r from-indigo-600 to-violet-600 px-6 py-5 flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-bold text-white">{task ? 'Edit Task' : 'New Task'}</h2>
+            <h2 className="text-xl font-bold text-white">{task ? t('task.editTask') : t('task.newTask')}</h2>
             <p className="text-indigo-200 text-sm mt-0.5">{task ? 'Update task details' : 'Add a task to this sprint'}</p>
           </div>
           <button onClick={onCancel} className="text-white/70 hover:text-white text-2xl leading-none transition">×</button>
@@ -77,7 +79,7 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
 
           {/* Title */}
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-gray-700">Task Name</label>
+            <label className="text-sm font-semibold text-gray-700">{t('task.taskName')}</label>
             <input
               type="text" value={form.title} onChange={set('title')}
               placeholder="e.g., Implement login page"
@@ -88,7 +90,7 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
           {/* Priority + Status */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-gray-700">Priority</label>
+              <label className="text-sm font-semibold text-gray-700">{t('task.priority')}</label>
               <div className="flex gap-2">
                 {PRIORITIES.map((p) => (
                   <button key={p} type="button" onClick={() => setForm((f) => ({ ...f, priority: p }))}
@@ -101,7 +103,7 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
               </div>
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-gray-700">Status</label>
+              <label className="text-sm font-semibold text-gray-700">{t('task.status')}</label>
               <select value={form.status} onChange={set('status')}
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
                 {STATUSES.map((s) => (
@@ -114,12 +116,12 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
           {/* Due Start + Due End */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-gray-700">Due Start</label>
+              <label className="text-sm font-semibold text-gray-700">{t('task.dueStart')}</label>
               <input type="date" value={form.due_start} onChange={set('due_start')}
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-gray-700">Date End</label>
+              <label className="text-sm font-semibold text-gray-700">{t('task.dueEnd')}</label>
               <input type="date" value={form.due_end} onChange={set('due_end')}
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
             </div>
@@ -127,45 +129,45 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
 
           {/* Week */}
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-gray-700">Week</label>
-            <input type="text" value={form.week} onChange={set('week')} placeholder="e.g. S1, W3..."
+            <label className="text-sm font-semibold text-gray-700">{t('task.week')}</label>
+            <input type="text" value={form.week} onChange={set('week')} placeholder={t('task.weekPlaceholder')}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
           </div>
 
           {/* Deliverable + Risk */}
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-gray-700">Deliverable</label>
-              <input type="text" value={form.deliverable} onChange={set('deliverable')} placeholder="Expected output..."
+              <label className="text-sm font-semibold text-gray-700">{t('task.deliverable')}</label>
+              <input type="text" value={form.deliverable} onChange={set('deliverable')} placeholder={t('task.deliverablePlaceholder')}
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-gray-700">Risk</label>
-              <input type="text" value={form.risk} onChange={set('risk')} placeholder="Identified risk..."
+              <label className="text-sm font-semibold text-gray-700">{t('task.risk')}</label>
+              <input type="text" value={form.risk} onChange={set('risk')} placeholder={t('task.riskPlaceholder')}
                 className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
             </div>
           </div>
 
           {/* Definition of Done */}
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-gray-700">Definition of Done</label>
+            <label className="text-sm font-semibold text-gray-700">{t('task.definitionOfDone')}</label>
             <textarea value={form.definition_of_done} onChange={set('definition_of_done')} rows={2}
-              placeholder="Completion criteria..."
+              placeholder={t('task.definitionOfDonePlaceholder')}
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none" />
           </div>
 
           {/* Dependencies */}
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-gray-700">Dependencies</label>
-            <input type="text" value={form.dependencies} onChange={set('dependencies')} placeholder="e.g. Task #3, external API..."
+            <label className="text-sm font-semibold text-gray-700">{t('task.dependencies')}</label>
+            <input type="text" value={form.dependencies} onChange={set('dependencies')} placeholder={t('task.dependenciesPlaceholder')}
               className="w-full px-4 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
           </div>
 
           {/* Description */}
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-gray-700">Description</label>
+            <label className="text-sm font-semibold text-gray-700">{t('task.description')}</label>
             <textarea value={form.description} onChange={set('description')} rows={2}
-              placeholder="Optional description..."
+              placeholder={t('task.descriptionPlaceholder')}
               className="w-full px-3 py-2.5 border border-gray-200 rounded-xl bg-gray-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none" />
           </div>
 
@@ -173,12 +175,12 @@ function TaskForm({ task, sprintId, users = [], onSubmit, onCancel }) {
           <div className="flex gap-3 pt-1">
             <button type="button" onClick={onCancel}
               className="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition">
-              Cancel
+              {t('common.cancel')}
             </button>
             <button type="submit" disabled={loading}
               className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl hover:opacity-90 transition disabled:opacity-60 flex items-center justify-center gap-2">
               {loading && <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />}
-              {task ? 'Update Task' : 'Add Task'}
+              {task ? t('task.updateTask') : t('task.addTask')}
             </button>
           </div>
         </form>

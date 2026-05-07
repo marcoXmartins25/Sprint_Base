@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../api';
+import { useLanguage } from '../LanguageContext';
 import TaskForm from '../components/TaskForm';
 import Avatar from '../components/Avatar';
 
@@ -201,6 +202,7 @@ function AvatarCircle({ user, size = 'w-6 h-6' }) {
 
 function SprintDetail() {
   const { id } = useParams();
+  const { t } = useLanguage();
   const [sprint, setSprint] = useState(null);
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
@@ -233,7 +235,7 @@ function SprintDetail() {
   };
 
   const handleDelete = async (taskId) => {
-    if (!confirm('Delete this task?')) return;
+    if (!confirm(t('task.deleteTask'))) return;
     await api.deleteTask(taskId);
     setTasks((prev) => prev.filter((t) => t.id !== taskId));
   };
@@ -255,10 +257,11 @@ function SprintDetail() {
   if (loading) return (
     <div className="flex items-center justify-center py-20">
       <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+      <span className="ml-3 text-gray-500">{t('common.loading')}</span>
     </div>
   );
 
-  if (!sprint) return <div className="text-center py-20 text-gray-500">Sprint not found</div>;
+  if (!sprint) return <div className="text-center py-20 text-gray-500">{t('sprint.notFound')}</div>;
 
   const fmtDate = (d) => new Date(d).toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -272,7 +275,7 @@ function SprintDetail() {
       <div className="flex items-start justify-between">
         <div>
           <Link to="/app" className="text-sm text-gray-400 hover:text-gray-700 transition inline-flex items-center gap-1 mb-2">
-            ← Back
+            ← {t('common.back')}
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">{sprint.title}</h1>
           <p className="text-sm text-gray-400 mt-0.5">{fmtDate(sprint.start_date)} → {fmtDate(sprint.end_date)}</p>
@@ -280,11 +283,11 @@ function SprintDetail() {
         <div className="flex gap-2">
           <button onClick={() => api.downloadReport(id)}
             className="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition">
-            ↓ PDF
+            {t('report.downloadPDF')}
           </button>
           <button onClick={() => setShowForm(true)}
             className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl hover:opacity-90 transition shadow-md shadow-indigo-200">
-            + Add Task
+            + {t('task.addTask')}
           </button>
         </div>
       </div>
@@ -292,11 +295,11 @@ function SprintDetail() {
       <div className="bg-white rounded-2xl border border-gray-100 p-5">
         <div className="grid grid-cols-5 gap-4 mb-4">
           {[
-            { label: 'Total',       value: stats.total,      cls: 'text-gray-900' },
-            { label: 'To Do',       value: stats.todo,       cls: 'text-gray-500' },
-            { label: 'In Progress', value: stats.inProgress, cls: 'text-blue-600' },
-            { label: 'Done',        value: stats.done,       cls: 'text-emerald-600' },
-            { label: 'Hours',       value: `${stats.hours}h`, cls: 'text-violet-600' },
+            { label: t('stats.total'),       value: stats.total,      cls: 'text-gray-900' },
+            { label: t('stats.toDo'),       value: stats.todo,       cls: 'text-gray-500' },
+            { label: t('stats.inProgress'), value: stats.inProgress, cls: 'text-blue-600' },
+            { label: t('stats.done'),        value: stats.done,       cls: 'text-emerald-600' },
+            { label: t('stats.hours'),       value: `${stats.hours}h`, cls: 'text-violet-600' },
           ].map(({ label, value, cls }) => (
             <div key={label} className="text-center">
               <p className={`text-2xl font-bold ${cls}`}>{value}</p>
@@ -307,7 +310,7 @@ function SprintDetail() {
         <div className="w-full bg-gray-100 rounded-full h-1.5">
           <div className="bg-gradient-to-r from-indigo-500 to-emerald-500 h-1.5 rounded-full transition-all" style={{ width: `${pct}%` }} />
         </div>
-        <p className="text-xs text-gray-400 mt-1.5 text-right">{pct}% complete</p>
+        <p className="text-xs text-gray-400 mt-1.5 text-right">{pct}% {t('stats.complete')}</p>
       </div>
 
       <div className="flex gap-2">
@@ -316,7 +319,7 @@ function SprintDetail() {
             className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition ${
               filter === s ? 'bg-indigo-600 text-white' : 'bg-white text-gray-500 border border-gray-200 hover:bg-gray-50'
             }`}>
-            {s === 'all' ? 'All' : s.replace('-', ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
+            {s === 'all' ? t('status.all') : t(`status.${s.replace('-', '')}`)}
           </button>
         ))}
       </div>
@@ -325,18 +328,18 @@ function SprintDetail() {
         <table className="w-full text-sm border-collapse">
           <thead>
             <tr className="border-b border-gray-100 bg-gray-50">
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-56">Task Name</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-16">Week</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-24">Priority</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-24">Due Start</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-24">Date End</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-36">Assign</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-40">Deliverable</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-40">Def. of Done</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-20">Hours</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-36">Dependencies</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-32">Risk</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-28">Status</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-56">{t('task.taskName')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-16">{t('task.week')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-24">{t('task.priority')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-24">{t('task.dueStart')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-24">{t('task.dueEnd')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-36">{t('task.assign')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-40">{t('task.deliverable')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-40">{t('task.definitionOfDone')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-20">{t('task.hours')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-36">{t('task.dependencies')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-32">{t('task.risk')}</th>
+              <th className="px-4 py-3 text-left text-xs font-semibold text-gray-400 uppercase tracking-wide w-28">{t('task.status')}</th>
               <th className="w-10"></th>
             </tr>
           </thead>
@@ -345,8 +348,8 @@ function SprintDetail() {
               <tr>
                 <td colSpan={13} className="text-center py-16">
                   <p className="text-3xl mb-2">📋</p>
-                  <p className="text-gray-500 font-medium">No tasks yet</p>
-                  <p className="text-gray-400 text-sm mt-1">Click "Add Task" to create the first one</p>
+                  <p className="text-gray-500 font-medium">{t('task.noTasks')}</p>
+                  <p className="text-gray-400 text-sm mt-1">{t('task.noTasksHint')}</p>
                 </td>
               </tr>
             ) : filtered.map((task) => (
@@ -388,7 +391,7 @@ function SprintDetail() {
                       return <Avatar user={user || { email: v }} size="w-6 h-6" />;
                     }}
                     renderOption={(v) => {
-                      if (!v) return <span className="text-gray-400 text-xs">Unassigned</span>;
+                      if (!v) return <span className="text-gray-400 text-xs">{t('task.unassigned')}</span>;
                       const user = users.find((u) => u.email === v);
                       const display = user?.name || v.split('@')[0];
                       return (

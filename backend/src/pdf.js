@@ -46,7 +46,7 @@ function fmtHours(h) {
   return `${n.toFixed(1)}h`;
 }
 
-function generateSprintReport(sprint, tasks, team = []) {
+function generateSprintReport(sprint, tasks, team = [], userPlan = 'free', branding = null) {
   const doc = new PDFDocument({ size: 'A4', margin: 0, bufferPages: true });
 
   const W = doc.page.width;
@@ -66,11 +66,21 @@ function generateSprintReport(sprint, tasks, team = []) {
 
   // PAGE 1 - COVER / SUMMARY
 
-  // Header gradient block
-  rect(doc, 0, 0, W, 130, COLORS.indigo, 0);
+  // Header gradient block (use custom color for Team plan)
+  const headerColor = (userPlan === 'team' && branding?.primary_color) 
+    ? branding.primary_color 
+    : COLORS.indigo;
+  
+  rect(doc, 0, 0, W, 130, headerColor, 0);
   doc.save().rect(W * 0.55, 0, W * 0.45, 130).fill(COLORS.violet).restore();
 
-  doc.fontSize(11).font('Helvetica').fillColor('rgba(255,255,255,0.6)').text('SprintBase', M, 28);
+  // Logo or SprintBase text
+  if (userPlan === 'team' && branding?.company_name) {
+    doc.fontSize(11).font('Helvetica').fillColor('rgba(255,255,255,0.6)')
+      .text(branding.company_name, M, 28);
+  } else {
+    doc.fontSize(11).font('Helvetica').fillColor('rgba(255,255,255,0.6)').text('SprintBase', M, 28);
+  }
   doc.fontSize(22).font('Helvetica-Bold').fillColor(COLORS.white).text(sprint.title, M, 48, { width: contentW });
   doc.fontSize(9).font('Helvetica').fillColor('rgba(255,255,255,0.75)')
     .text(`${fmt(sprint.start_date)}  ->  ${fmt(sprint.end_date)}`, M, 80);
@@ -274,6 +284,19 @@ function generateSprintReport(sprint, tasks, team = []) {
 
     doc.fontSize(7).fillColor(COLORS.gray400)
       .text(`Page ${i + 1} of ${pages.count}`, 0, fY + 12, { width: pageW - M, align: 'right' });
+    
+    // Add watermark for free plan
+    if (userPlan === 'free') {
+      doc.save();
+      doc.translate(pageW / 2, pageH / 2);
+      doc.rotate(-45, { origin: [0, 0] });
+      doc.fontSize(60)
+        .font('Helvetica-Bold')
+        .fillColor(COLORS.gray200)
+        .opacity(0.15)
+        .text('SPRINTBASE FREE', -200, -20, { width: 400, align: 'center' });
+      doc.restore();
+    }
   }
 
   doc.end();

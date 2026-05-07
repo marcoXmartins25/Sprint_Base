@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useLanguage } from '../LanguageContext';
 
 function SprintForm({ sprint, onSubmit, onCancel }) {
+  const { t } = useLanguage();
   const [title, setTitle] = useState('');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -19,9 +21,9 @@ function SprintForm({ sprint, onSubmit, onCancel }) {
     e.preventDefault();
     setError('');
 
-    if (!title.trim()) return setError('Title is required');
-    if (!startDate || !endDate) return setError('Start and end dates are required');
-    if (new Date(startDate) > new Date(endDate)) return setError('End date must be after start date');
+    if (!title.trim()) return setError(t('sprint.titleRequired'));
+    if (!startDate || !endDate) return setError(t('sprint.datesRequired'));
+    if (new Date(startDate) > new Date(endDate)) return setError(t('sprint.endAfterStart'));
 
     setLoading(true);
     try {
@@ -42,7 +44,7 @@ function SprintForm({ sprint, onSubmit, onCancel }) {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-bold text-white">
-                {sprint ? 'Edit Sprint' : 'New Sprint'}
+                {sprint ? t('sprint.editSprint') : t('sprint.newSprint')}
               </h2>
               <p className="text-indigo-200 text-sm mt-0.5">
                 {sprint ? 'Update sprint details' : 'Plan your next sprint'}
@@ -62,7 +64,7 @@ function SprintForm({ sprint, onSubmit, onCancel }) {
           )}
 
           <div className="space-y-1.5">
-            <label className="block text-sm font-semibold text-gray-700">Sprint Title</label>
+            <label className="block text-sm font-semibold text-gray-700">{sprint ? t('sprint.title') : t('sprint.title')}</label>
             <input
               type="text"
               value={title}
@@ -74,7 +76,7 @@ function SprintForm({ sprint, onSubmit, onCancel }) {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-gray-700">Start Date</label>
+              <label className="block text-sm font-semibold text-gray-700">{t('sprint.startDate')}</label>
               <input
                 type="date"
                 value={startDate}
@@ -83,7 +85,7 @@ function SprintForm({ sprint, onSubmit, onCancel }) {
               />
             </div>
             <div className="space-y-1.5">
-              <label className="block text-sm font-semibold text-gray-700">End Date</label>
+              <label className="block text-sm font-semibold text-gray-700">{t('sprint.endDate')}</label>
               <input
                 type="date"
                 value={endDate}
@@ -99,7 +101,7 @@ function SprintForm({ sprint, onSubmit, onCancel }) {
               onClick={onCancel}
               className="flex-1 px-4 py-2.5 text-sm font-semibold text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition"
             >
-              Cancel
+              {t('common.cancel')}
             </button>
             <button
               type="submit"
@@ -107,7 +109,7 @@ function SprintForm({ sprint, onSubmit, onCancel }) {
               className="flex-1 px-4 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl hover:opacity-90 transition disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {loading && <span className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />}
-              {sprint ? 'Update Sprint' : 'Create Sprint'}
+              {sprint ? t('sprint.updateSprint') : t('sprint.createSprint')}
             </button>
           </div>
         </form>
