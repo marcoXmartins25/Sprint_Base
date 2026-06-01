@@ -281,9 +281,13 @@ function SprintDetail() {
           <p className="text-sm text-gray-400 mt-0.5">{fmtDate(sprint.start_date)} → {fmtDate(sprint.end_date)}</p>
         </div>
         <div className="flex gap-2">
+          <button onClick={() => api.downloadPlan(id)}
+            className="px-4 py-2 text-sm font-medium text-blue-600 bg-white border border-blue-200 rounded-xl hover:bg-blue-50 transition">
+            {t('report.downloadPlan')}
+          </button>
           <button onClick={() => api.downloadReport(id)}
-            className="px-4 py-2 text-sm font-medium text-gray-600 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition">
-            {t('report.downloadPDF')}
+            className="px-4 py-2 text-sm font-medium text-emerald-600 bg-white border border-emerald-200 rounded-xl hover:bg-emerald-50 transition">
+            {t('report.downloadReport')}
           </button>
           <button onClick={() => setShowForm(true)}
             className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-indigo-600 to-violet-600 rounded-xl hover:opacity-90 transition shadow-md shadow-indigo-200">

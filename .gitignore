@@ -57,3 +57,9 @@ uploads/
 # Logs
 logs/
 *.log
+
+#claude
+.claude/
+.claude.json
+skills-lock.json
+.agents/

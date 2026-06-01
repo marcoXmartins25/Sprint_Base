@@ -87,7 +87,9 @@
     "complete": "complete"
   },
   "report": {
-    "downloadPDF": "↓ PDF"
+    "downloadPDF": "↓ PDF",
+    "downloadPlan": "↓ Sprint Plan",
+    "downloadReport": "↓ Sprint Report"
   },
   "profile": {
     "title": "Profile",

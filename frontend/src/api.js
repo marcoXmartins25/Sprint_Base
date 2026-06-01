@@ -59,6 +59,11 @@ export const api = {
     const token = localStorage.getItem('token');
     window.open(`${API_BASE}/sprints/${sprintId}/report?token=${token}`, '_blank');
   },
+
+  downloadPlan: (sprintId) => {
+    const token = localStorage.getItem('token');
+    window.open(`${API_BASE}/sprints/${sprintId}/plan?token=${token}`, '_blank');
+  },
 };
 
 export function setToken(token) {
