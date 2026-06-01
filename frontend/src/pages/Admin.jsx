@@ -379,7 +379,7 @@ function Admin() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-semibold text-gray-700">Name (optional)</label>
+                <label className="text-sm font-semibold text-gray-700">Name(optional)</label>
                 <input
                   type="text"
                   value={newUser.name}
