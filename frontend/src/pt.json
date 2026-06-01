@@ -87,7 +87,9 @@
     "complete": "completo"
   },
   "report": {
-    "downloadPDF": "↓ PDF"
+    "downloadPDF": "↓ PDF",
+    "downloadPlan": "↓ Plano",
+    "downloadReport": "↓ Relatório"
   },
   "profile": {
     "title": "Perfil",
