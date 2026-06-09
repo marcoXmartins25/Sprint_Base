@@ -67,14 +67,27 @@ app.put('/api/users/:id', verifyToken, async (req, res) => {
   }
 });
 
-app.post('/api/users/:id/avatar', verifyToken, upload.single('avatar'), async (req, res) => {
-  const { pool } = require('./db');
-  const avatarUrl = `/uploads/${req.file.filename}`;
-  const result = await pool.query(
-    'UPDATE users SET avatar_url = $1 WHERE id = $2 RETURNING id, email, name, avatar_url',
-    [avatarUrl, req.params.id]
-  );
-  res.json(result.rows[0]);
+app.post('/api/users/:id/avatar', verifyToken, (req, res, next) => {
+  upload.single('avatar')(req, res, (err) => {
+    if (err && err.code === 'LIMIT_FILE_SIZE') {
+      return res.status(400).json({ error: 'File too large. Maximum size is 2MB.' });
+    }
+    if (err) return res.status(400).json({ error: err.message });
+    next();
+  });
+}, async (req, res) => {
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded.' });
+  try {
+    const { pool } = require('./db');
+    const avatarUrl = `/uploads/${req.file.filename}`;
+    const result = await pool.query(
+      'UPDATE users SET avatar_url = $1 WHERE id = $2 RETURNING id, email, name, avatar_url',
+      [avatarUrl, req.params.id]
+    );
+    res.json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 app.use('/api/sprints', verifyToken, sprintRoutes);
 app.use('/api/tasks', verifyToken, taskRoutes);

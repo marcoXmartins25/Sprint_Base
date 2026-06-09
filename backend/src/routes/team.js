@@ -4,6 +4,7 @@ const { pool } = require('../db');
 const { attachCompany, requireOwnerOrAdmin, requireOwner } = require('../companyMiddleware');
 const { verifyToken } = require('./auth');
 const { sendInviteEmail } = require('../emailService');
+const { checkTeamMemberLimit } = require('../planLimits');
 
 const router = express.Router();
 
@@ -48,6 +49,12 @@ router.post('/invite', verifyToken, attachCompany, requireOwnerOrAdmin, async (r
 
     if (role && !['admin', 'member'].includes(role)) {
       return res.status(400).json({ error: 'Invalid role. Must be admin or member' });
+    }
+
+    // Check team member plan limit
+    const limitCheck = await checkTeamMemberLimit(req.companyId);
+    if (!limitCheck.allowed) {
+      return res.status(402).json({ error: limitCheck.message });
     }
 
     // Check if user already exists in this company

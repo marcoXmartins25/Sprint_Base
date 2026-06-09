@@ -2,8 +2,7 @@ const { pool } = require('./db');
 
 async function checkAdmin(req, res, next) {
   try {
-    // Get user from token (req.user.id set by verifyToken middleware)
-    const userId = req.user?.id || 1; // fallback to 1 for testing
+    const userId = req.userId;
     
     const result = await pool.query('SELECT role FROM users WHERE id = $1', [userId]);
     
