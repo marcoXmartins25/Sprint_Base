@@ -44,9 +44,10 @@ router.post('/login', async (req, res) => {
     }
 
     const result = await pool.query(
-      `SELECT u.*, c.name as company_name, c.plan as company_plan 
-       FROM users u 
-       LEFT JOIN companies c ON u.company_id = c.id 
+      `SELECT u.id, u.email, u.name, u.role, u.company_role, u.company_id, u.password_hash, u.avatar_url,
+              c.name as company_name, c.plan as company_plan
+       FROM users u
+       LEFT JOIN companies c ON u.company_id = c.id
        WHERE u.email = $1`,
       [email]
     );
@@ -73,6 +74,7 @@ router.post('/login', async (req, res) => {
         companyId: user.company_id,
         companyName: user.company_name,
         companyPlan: user.company_plan,
+        avatar_url: user.avatar_url,
       },
     });
   } catch (err) {
@@ -104,7 +106,7 @@ router.get('/verify', verifyToken, async (req, res) => {
         companyId: user.company_id,
         companyName: user.company_name,
         companyPlan: user.company_plan,
-        avatarUrl: user.avatar_url,
+        avatar_url: user.avatar_url,
       }
     });
   } catch (err) {

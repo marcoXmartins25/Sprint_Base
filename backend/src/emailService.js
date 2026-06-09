@@ -119,7 +119,7 @@ async function sendInviteEmail(userEmail, companyName, token) {
   try {
     const { data, error } = await resend.emails.send({
       from: 'SprintBase <onboarding@resend.dev>',
-      to: [adminEmail], // Send to admin for testing
+      to: [userEmail],
       subject: `🎉 You're invited to join ${companyName} on SprintBase`,
       html: `
         <!DOCTYPE html>

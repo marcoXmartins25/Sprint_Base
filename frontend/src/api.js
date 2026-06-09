@@ -35,14 +35,20 @@ export const api = {
 
   getUsers: () => fetchApi('/users'),
   updateUser: (id, data) => fetchApi(`/users/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
-  uploadAvatar: (id, file) => {
+  uploadAvatar: async (id, file) => {
     const formData = new FormData();
     formData.append('avatar', file);
-    return fetch(`/api/users/${id}/avatar`, {
+    const r = await fetch(`/api/users/${id}/avatar`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       body: formData,
-    }).then((r) => r.json());
+    });
+    const contentType = r.headers.get('content-type') || '';
+    if (!contentType.includes('application/json')) {
+      const text = await r.text();
+      throw new Error(`Server error (${r.status}): ${text.slice(0, 200)}`);
+    }
+    return r.json();
   },
   getSprints: () => fetchApi('/sprints'),
   getSprint: (id) => fetchApi(`/sprints/${id}`),

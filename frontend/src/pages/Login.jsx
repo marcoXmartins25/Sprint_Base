@@ -21,6 +21,7 @@ export default function Login() {
     try {
       const data = await api.login({ email, password });
       setToken(data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       navigate('/app');
     } catch (err) {
       setError(err.message);

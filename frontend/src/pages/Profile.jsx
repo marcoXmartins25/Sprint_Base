@@ -43,9 +43,17 @@ function Profile() {
     const file = e.target.files[0];
     if (!file) return;
     setUploading(true);
-    const updated = await api.uploadAvatar(user.id, file);
-    setUser((u) => ({ ...u, avatar_url: updated.avatar_url }));
-    setUploading(false);
+    setError('');
+    try {
+      const updated = await api.uploadAvatar(user.id, file);
+      if (updated.error) { setError(updated.error); return; }
+      setUser((u) => ({ ...u, avatar_url: updated.avatar_url }));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setUploading(false);
+      fileRef.current.value = '';
+    }
   };
 
   if (!user) return (
