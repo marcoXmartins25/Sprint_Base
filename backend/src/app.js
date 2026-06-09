@@ -1,15 +1,30 @@
-require('dotenv').config();
-const app = require('./app');
+const express = require('express');
+const cors = require('cors');
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 
-const PORT = process.env.PORT || 3000;
+const { verifyToken } = require('./routes/auth');
+const authRoutes = require('./routes/auth').router;
+const sprintRoutes = require('./routes/sprints');
+const taskRoutes = require('./routes/tasks');
+const reportRoutes = require('./routes/reports');
+const planRoutes = require('./routes/plan');
+const brandingRoutes = require('./routes/branding');
+const usersRoutes = require('./routes/users');
+const companiesRoutes = require('./routes/companies');
+const teamRoutes = require('./routes/team');
+const invitesRoutes = require('./routes/invites');
+
+const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/uploads', express.static(path.join(__dirname, '../../uploads')));
 
-const fs = require('fs');
 const uploadsDir = path.join(__dirname, '../../uploads');
 if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+app.use('/uploads', express.static(uploadsDir));
 
 const storage = multer.diskStorage({
   destination: uploadsDir,
@@ -21,7 +36,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/companies', companiesRoutes);
 app.use('/api/invites', invitesRoutes);
 
-// Servir uploads apenas para utilizadores autenticados
 app.get('/uploads/:file', verifyToken, (req, res) => {
   const filePath = path.join(uploadsDir, req.params.file);
   if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
@@ -74,6 +88,7 @@ app.post('/api/users/:id/avatar', verifyToken, (req, res, next) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 app.use('/api/sprints', verifyToken, sprintRoutes);
 app.use('/api/tasks', verifyToken, taskRoutes);
 app.use('/api/sprints', verifyToken, reportRoutes);
@@ -86,6 +101,4 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+module.exports = app;
